@@ -1,6 +1,5 @@
 spring:
   application:
-    name: AuthService
-  cloud:
-    config:
-      import: "Optional:configserver:http://localhost:8888"
+    name: auth-service
+  config:
+    import: "optional:configserver:http://localhost:8888/"
