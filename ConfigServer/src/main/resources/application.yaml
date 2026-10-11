@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ConfigServer
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Gagan499/ConfigurationServer.git
+          default-label: main
