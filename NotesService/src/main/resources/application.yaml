@@ -22,8 +22,14 @@ spring:
       host: ${NOTES_REDIS_HOST:localhost}
       port: ${NOTES_REDIS_PORT:6379}
       password: ${NOTES_REDIS_PASSWORD:}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 server:
-  port: ${NOTES_SERVER_PORT:8081}
+  port: ${NOTES_SERVER_PORT:8083}
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}
+notes:
+  reminders:
+    topic: ${NOTES_REMINDER_TOPIC:note-reminder}
+    scheduler-interval-ms: ${NOTES_REMINDER_SCHEDULER_INTERVAL_MS:30000}

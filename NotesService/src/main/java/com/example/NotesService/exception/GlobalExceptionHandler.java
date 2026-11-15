@@ -42,6 +42,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(exception.getMessage()));
     }
 
+    @ExceptionHandler(ReminderNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleReminderNotFound(ReminderNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(exception.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnexpectedError(Exception exception) {
         log.error("Unexpected NotesService error", exception);
