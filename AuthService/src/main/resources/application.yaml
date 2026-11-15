@@ -1,3 +1,33 @@
 spring:
+  config:
+    import: optional:file:./.env[.properties]
   application:
     name: AuthService
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO}
+    show-sql: ${JPA_SHOW_SQL}
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  reset-expiration: ${JWT_RESET_EXPIRATION:900000}
+app:
+  frontend:
+    reset-password-url: ${FRONTEND_RESET_PASSWORD_URL}
+server:
+  port: ${SERVER_PORT}
