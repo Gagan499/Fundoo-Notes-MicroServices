@@ -23,9 +23,10 @@ public class Jwtutils {
     @Value("${jwt.reset-expiration:900000}")
     private long resetTokenLifetimeMillis;
 
-    public String generateToken(String email) {
+    public String generateToken(String email, Long userId) {
         return Jwts.builder()
                 .subject(email)
+                .claim("user_id", userId)
                 .claim("token_type", "access")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + tokenLifetimeMillis))
