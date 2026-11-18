@@ -33,6 +33,10 @@ public class JwtUtils {
         if (!(userIdClaim instanceof Number userId) || userId.longValue() <= 0) {
             throw new JwtException("Token has no valid user ID");
         }
-        return new NotesPrincipal(userId.longValue());
+        String email = claims.getSubject();
+        if (email == null || email.isBlank()) {
+            throw new JwtException("Token has no valid user email");
+        }
+        return new NotesPrincipal(userId.longValue(), email);
     }
 }

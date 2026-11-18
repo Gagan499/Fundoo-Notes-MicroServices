@@ -60,7 +60,7 @@ class ReminderServiceImplTest {
         when(reminderRepository.save(any(NoteReminder.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        var result = reminderService.createReminder(request, 42L);
+        var result = reminderService.createReminder(request, 42L, "user@example.com");
 
         assertEquals(10L, result.getNoteId());
         verify(reminderRepository).save(any(NoteReminder.class));
@@ -73,6 +73,7 @@ class ReminderServiceImplTest {
                 .reminderId(7L)
                 .note(note)
                 .userId(42L)
+                .userEmail("user@example.com")
                 .reminderTime(LocalDateTime.now().minusMinutes(1))
                 .build();
         when(reminderRepository.findByNotifiedFalseAndReminderTimeLessThanEqual(any(LocalDateTime.class)))
@@ -89,7 +90,7 @@ class ReminderServiceImplTest {
     @Test
     void reminderEventCanBeSerializedForKafka() {
         NoteReminderEvent event = new NoteReminderEvent(
-                7L, 10L, 42L, "Call", LocalDateTime.now());
+                7L, 10L, 42L, "user@example.com", "Call", LocalDateTime.now());
         JacksonJsonSerializer<NoteReminderEvent> serializer = new JacksonJsonSerializer<>();
 
         assertTrue(serializer.serialize("note-reminder", event).length > 0);

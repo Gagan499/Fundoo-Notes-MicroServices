@@ -25,6 +25,16 @@
             "projectName": "NotesService",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-NotificationServiceApplication<NotificationService>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.NotificationService.NotificationServiceApplication",
+            "projectName": "NotificationService",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

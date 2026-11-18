@@ -38,6 +38,9 @@ public class NoteReminder {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "user_email")
+    private String userEmail;
+
     @Column(name = "reminder_time", nullable = false)
     private LocalDateTime reminderTime;
 

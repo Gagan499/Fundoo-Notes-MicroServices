@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @Slf4j
@@ -41,11 +42,12 @@ public class ReminderServiceImpl implements ReminderService {
 
     @Override
     @Transactional
-    public ReminderResponseDTO createReminder(ReminderRequestDTO request, Long userId) {
+    public ReminderResponseDTO createReminder(ReminderRequestDTO request, Long userId, String userEmail) {
         Note note = findOwnedNote(request.getNoteId(), userId);
         NoteReminder reminder = NoteReminder.builder()
                 .note(note)
                 .userId(userId)
+                .userEmail(userEmail)
                 .reminderTime(request.getReminderTime())
                 .build();
         return toResponse(reminderRepository.save(reminder));
@@ -67,10 +69,12 @@ public class ReminderServiceImpl implements ReminderService {
 
     @Override
     @Transactional
-    public ReminderResponseDTO updateReminder(ReminderRequestDTO request, Long reminderId, Long userId) {
+    public ReminderResponseDTO updateReminder(
+            ReminderRequestDTO request, Long reminderId, Long userId, String userEmail) {
         NoteReminder reminder = findOwnedReminder(reminderId, userId);
         Note note = findOwnedNote(request.getNoteId(), userId);
         reminder.setNote(note);
+        reminder.setUserEmail(userEmail);
         reminder.setReminderTime(request.getReminderTime());
         reminder.setNotified(false);
         return toResponse(reminderRepository.save(reminder));
@@ -88,11 +92,16 @@ public class ReminderServiceImpl implements ReminderService {
         List<NoteReminder> dueReminders = reminderRepository
                 .findByNotifiedFalseAndReminderTimeLessThanEqual(LocalDateTime.now());
         for (NoteReminder reminder : dueReminders) {
+            if (!StringUtils.hasText(reminder.getUserEmail())) {
+                log.error("Reminder {} has no recipient email and cannot be published", reminder.getReminderId());
+                continue;
+            }
             Note note = reminder.getNote();
             NoteReminderEvent event = new NoteReminderEvent(
                     reminder.getReminderId(),
                     note.getNoteId(),
                     reminder.getUserId(),
+                    reminder.getUserEmail(),
                     note.getTitle(),
                     reminder.getReminderTime());
             try {

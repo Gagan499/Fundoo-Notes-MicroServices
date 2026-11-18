@@ -5,13 +5,13 @@ import com.example.NotesService.dto.ReminderResponseDTO;
 import java.util.List;
 
 public interface ReminderService {
-    ReminderResponseDTO createReminder(ReminderRequestDTO request, Long userId);
+    ReminderResponseDTO createReminder(ReminderRequestDTO request, Long userId, String userEmail);
 
     List<ReminderResponseDTO> getRemindersByUserId(Long userId);
 
     ReminderResponseDTO getReminderById(Long reminderId, Long userId);
 
-    ReminderResponseDTO updateReminder(ReminderRequestDTO request, Long reminderId, Long userId);
+    ReminderResponseDTO updateReminder(ReminderRequestDTO request, Long reminderId, Long userId, String userEmail);
 
     void deleteReminder(Long reminderId, Long userId);
 

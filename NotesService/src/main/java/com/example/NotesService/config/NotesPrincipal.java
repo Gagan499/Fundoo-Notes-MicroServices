@@ -1,4 +1,4 @@
 package com.example.NotesService.config;
 
-public record NotesPrincipal(Long userId) {
+public record NotesPrincipal(Long userId, String email) {
 }

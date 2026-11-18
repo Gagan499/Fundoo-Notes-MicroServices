@@ -31,6 +31,7 @@ class JwtUtilsTest {
         NotesPrincipal principal = jwtUtils.parseAccessToken(token);
 
         assertEquals(51L, principal.userId());
+        assertEquals("user@example.com", principal.email());
     }
 
     @Test

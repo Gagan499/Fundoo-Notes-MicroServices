@@ -33,7 +33,8 @@ public class ReminderController {
     public ResponseEntity<ApiResponse<ReminderResponseDTO>> create(
             @AuthenticationPrincipal NotesPrincipal principal,
             @Valid @RequestBody ReminderRequestDTO request) {
-        ReminderResponseDTO reminder = reminderService.createReminder(request, principal.userId());
+        ReminderResponseDTO reminder =
+                reminderService.createReminder(request, principal.userId(), principal.email());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Reminder created successfully", reminder));
     }
@@ -60,7 +61,7 @@ public class ReminderController {
             @PathVariable Long reminderId,
             @Valid @RequestBody ReminderRequestDTO request) {
         ReminderResponseDTO reminder =
-                reminderService.updateReminder(request, reminderId, principal.userId());
+                reminderService.updateReminder(request, reminderId, principal.userId(), principal.email());
         return ResponseEntity.ok(ApiResponse.success("Reminder updated successfully", reminder));
     }
 
