@@ -20,9 +20,32 @@ public class NoteReminderListener {
     @KafkaListener(
             topics = "${notification.kafka.topic}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "reminderKafkaListenerContainerFactory")
+            containerFactory = "reminderKafkaListenerContainerFactory"
+    )
     public void consume(NoteReminderEvent event) {
-        NotificationResponseDTO response = notificationService.sendReminderNotification(event);
-        log.info("Processed reminder notification {}", response.reminderId());
+
+        // Step 1: Confirm Kafka received the message
+        log.info("========== KAFKA MESSAGE RECEIVED ==========");
+        log.info("Reminder ID: {}", event.reminderId());
+        log.info("Note ID: {}", event.noteId());
+        log.info("Recipient: {}", event.recipientEmail());
+        log.info("Note Title: {}", event.noteTitle());
+
+        try {
+            // Step 2: Send notification
+            NotificationResponseDTO response =
+                    notificationService.sendReminderNotification(event);
+
+            // Step 3: Confirm successful processing
+            log.info("Notification processed successfully. Reminder ID: {}",
+                    response.reminderId());
+
+        } catch (Exception exception) {
+
+            log.error("Failed to process reminder ID: {}",
+                    event.reminderId(), exception);
+
+            throw exception;
+        }
     }
 }
